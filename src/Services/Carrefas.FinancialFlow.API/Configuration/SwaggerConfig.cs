@@ -85,10 +85,10 @@ namespace Carrefas.FinancialFlow.API.Configuration
         {
             var info = new OpenApiInfo()
             {
-                Title = "API - Diazin",
+                Title = "API - Carrefas",
                 Version = description.ApiVersion.ToString(),
-                Description = "Esta API faz parte do projeto COCKPIT.",
-                Contact = new OpenApiContact() { Name = "COCKPIT", Email = "contato@diazin.com.br" },
+                Description = "Esta API faz parte do teste Carrefoue.",
+                Contact = new OpenApiContact() { Name = "C4", Email = "contato@carrefour.com.br" },
                 License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
             };
 
