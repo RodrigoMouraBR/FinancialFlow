@@ -12,7 +12,7 @@ A solução está estruturada em quatro camadas principais e o CORE (onde utiliz
 Contém os serviços de aplicação, DTOs (Data Transfer Objects) e interfaces de serviços de aplicação.
 ## Infrastructure:
 Contém as implementações de repositórios, contexto de banco de dados e serviços de infraestrutura.
-## API: 
+## API: :
 Contém os controladores e configurações da API.
 Requisitos de Negócio
 Serviço que faça o controle de lançamentos
