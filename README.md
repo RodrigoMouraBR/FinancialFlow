@@ -17,3 +17,6 @@ Contém os controladores e configurações da API.
 Requisitos de Negócio
 Serviço que faça o controle de lançamentos
 Serviço do consolidado diário
+
+#A aplicação possui um docker compose para subir banco de dados
+# Tem a implementação do RabbitMQ para disparo para fila
