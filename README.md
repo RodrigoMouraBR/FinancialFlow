@@ -18,5 +18,8 @@ Requisitos de Negócio
 Serviço que faça o controle de lançamentos
 Serviço do consolidado diário
 
+#importante
+
 ## A aplicação possui um docker compose para subir banco de dados
-## Tem a implementação do RabbitMQ para disparo para fila
+## É preciso utilizar update-database para criar o banco de dados (utilização de migrations do EF)
+## Tem a implementação do RabbitMQ para disparo para fila e já está no docker compose
