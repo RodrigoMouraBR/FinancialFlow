@@ -37,6 +37,10 @@ builder.Services.AddSwaggerConfig();
 
 builder.Services.ResolveDependencies();
 
+builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
+builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
+builder.Services.AddHostedService<RabbitMQHostedService>();
+
 #endregion
 
 #region AutoMapper
@@ -46,10 +50,7 @@ builder.Services.AddAutoMapper(typeof(FinancialFlowMappingConfig));
 
 #endregion
 
-builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
 
-builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
-builder.Services.AddHostedService<RabbitMQHostedService>();
 
 
 var app = builder.Build();

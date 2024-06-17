@@ -44,7 +44,10 @@ namespace Carrefas.FinancialFlow.Domain.Services
 
             #region Enviar objeto para o RabbitMQ para fila consolidatedQueue
 
-            QueueProd.EnviacardParaFila(consolidated, "consolidatedQueue");
+            for (int i = 0; i < 200; i++)
+            {
+                QueueProd.EnviacardParaFila(consolidated, "consolidatedQueue");
+            }            
 
             #endregion
         }

@@ -4,16 +4,20 @@ namespace Carrefas.FinancialFlow.API.Configuration
 {
     public class RabbitMQHostedService : IHostedService
     {
-        private readonly IRabbitMqService _consumer;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public RabbitMQHostedService(IRabbitMqService consumer)
+        public RabbitMQHostedService(IServiceScopeFactory scopeFactory)
         {
-            _consumer = consumer;
+            _scopeFactory = scopeFactory;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _consumer.StartConsuming();
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var consumer = scope.ServiceProvider.GetRequiredService<IRabbitMqService>();
+                consumer.StartConsuming();
+            }
             return Task.CompletedTask;
         }
 
