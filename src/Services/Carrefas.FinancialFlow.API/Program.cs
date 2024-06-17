@@ -2,6 +2,11 @@ using Carrefas.FinancialFlow.API.Configuration;
 using Carrefas.FinancialFlow.Application.AutoMapper;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Carrefas.FinancialFlow.Data.Contexts;
+using RabbitMQ.Client;
+using Carrefas.FinancialFlow.Application.Interfaces;
+using Carrefas.FinancialFlow.Application.Services;
+using Carrefas.FinancialFlow.Domain.Queue;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +46,11 @@ builder.Services.AddAutoMapper(typeof(FinancialFlowMappingConfig));
 
 #endregion
 
-//builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
+
+builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
+builder.Services.AddHostedService<RabbitMQHostedService>();
+
 
 var app = builder.Build();
 

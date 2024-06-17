@@ -7,5 +7,7 @@ namespace Carrefas.FinancialFlow.Domain.Interfaces
         Task<bool> AddFinancialPosting(FinancialPosting financialPosting);
 
         Task<DailyConsolidated> GetDailyConsolidated(DateTime date);
+
+        Task<bool> Atualizar(DailyConsolidated dailyConsolidated);
     }
 }

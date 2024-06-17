@@ -11,8 +11,8 @@ namespace Carrefas.FinancialFlow.Domain.Services
         private readonly ILogger<FinancialFlowService> _logger;
         private readonly IFinancialFlowRepository _financialFlowRepository;
 
-        public FinancialFlowService(INotifier notifier, 
-                                    ILogger<FinancialFlowService> logger, 
+        public FinancialFlowService(INotifier notifier,
+                                    ILogger<FinancialFlowService> logger,
                                     IFinancialFlowRepository financialFlowRepository) : base(notifier)
         {
             _logger = logger;
@@ -28,21 +28,32 @@ namespace Carrefas.FinancialFlow.Domain.Services
             if (commit)
             {
                 _logger.LogInformation("Lançamento realizado com sucesso");
-                await UpdateConsolidatedDaily(financialPosting.Date);
+
+                await UpdateConsolidatedDailyQueue(financialPosting.Date);
             }
 
             return commit;
         }
 
-        private async Task<bool> UpdateConsolidatedDaily(DateTime date)
+        private async Task UpdateConsolidatedDailyQueue(DateTime date)
         {
-            var financialPosting = await _financialFlowRepository.SearchFinancialPosting(c => c.Date == date);  
-
-            var balance = financialPosting.Sum(l => l.IsCredit ? l.Value : -l.Value);           
+            var financialPosting = await _financialFlowRepository.SearchFinancialPosting(c => c.Date == date);
+            var balance = financialPosting.Sum(l => l.IsCredit ? l.Value : -l.Value);
 
             var consolidated = new DailyConsolidated(date, balance);
 
-            _financialFlowRepository.UpdateConsolidatedDaily(consolidated);
+            #region Enviar objeto para o RabbitMQ para fila consolidatedQueue
+
+            QueueProd.EnviacardParaFila(consolidated, "consolidatedQueue");
+
+            #endregion
+        }
+
+        public async Task<DailyConsolidated> GetDailyConsolidated(DateTime date) => await _financialFlowRepository.GetDailyConsolidated(date);
+
+        public async Task<bool> Atualizar(DailyConsolidated dailyConsolidated)
+        {
+            _financialFlowRepository.UpdateConsolidatedDaily(dailyConsolidated);
 
             var commit = await _financialFlowRepository.UnitOfWork.Commit();
 
@@ -55,8 +66,6 @@ namespace Carrefas.FinancialFlow.Domain.Services
             _logger.LogError("Error ao atualizar Consolidado... :)");
             return false;
         }
-
-        public async Task<DailyConsolidated> GetDailyConsolidated(DateTime date) => await _financialFlowRepository.GetDailyConsolidated(date);
 
     }
 }

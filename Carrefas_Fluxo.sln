@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F42AF60E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carrefas.FinancialFlow.Tests", "Tests\Carrefas.FinancialFlow.Tests\Carrefas.FinancialFlow.Tests.csproj", "{558C3DF2-078B-455C-ADDC-560D57F08A63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carrefas.FinancialFlow.API", "src\Services\Carrefas.FinancialFlow.API\Carrefas.FinancialFlow.API.csproj", "{6C092D32-928A-466C-89A0-6E19BA900DD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Carrefas.FinancialFlow.API", "src\Services\Carrefas.FinancialFlow.API\Carrefas.FinancialFlow.API.csproj", "{6C092D32-928A-466C-89A0-6E19BA900DD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
