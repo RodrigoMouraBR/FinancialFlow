@@ -4,7 +4,7 @@
 Esta solução visa atender a necessidade de um comerciante em controlar seu fluxo de caixa diário, gerenciando lançamentos (débitos e créditos) e gerando relatórios de saldo diário consolidado.
 
 ## Estrutura do Projeto
-A solução está estruturada em quatro camadas principais:
+A solução está estruturada em quatro camadas principais e o CORE (onde utilizar classes que são reutilizaveis):
 
 ## Domain: 
  Contém as entidades, agregados, valores de objetos, serviços de domínio e interfaces de repositórios.
