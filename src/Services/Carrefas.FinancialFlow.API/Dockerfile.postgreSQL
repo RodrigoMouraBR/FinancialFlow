@@ -1,6 +1,0 @@
-FROM postgres:latest
-
-# Define environment variables
-ENV POSTGRES_USER=teste
-ENV POSTGRES_PASSWORD=teste
-ENV POSTGRES_DB=carrefas_fluxo

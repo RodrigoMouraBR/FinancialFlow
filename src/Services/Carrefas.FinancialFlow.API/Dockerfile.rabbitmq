@@ -1,6 +1,0 @@
-# Dockerfile.rabbitmq
-FROM rabbitmq:3-management
-
-# Define environment variables
-ENV RABBITMQ_DEFAULT_USER=myuser
-ENV RABBITMQ_DEFAULT_PASS=mypassword

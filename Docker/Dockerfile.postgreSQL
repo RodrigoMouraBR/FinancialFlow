@@ -1,0 +1,13 @@
+# Usar a imagem oficial do PostgreSQL do Docker Hub
+FROM postgres:15
+
+# Definir variáveis de ambiente para o banco de dados, usuário e senha
+ENV POSTGRES_DB=financialflow
+ENV POSTGRES_USER=guest
+ENV POSTGRES_PASSWORD=guest
+
+# Expor a porta do PostgreSQL
+EXPOSE 5432
+
+# Comando para iniciar o PostgreSQL
+CMD ["postgres"]

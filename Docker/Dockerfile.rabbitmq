@@ -1,0 +1,12 @@
+# Usar a imagem oficial do RabbitMQ do Docker Hub
+FROM rabbitmq:3-management
+
+# Definir variáveis de ambiente para login e senha
+ENV RABBITMQ_DEFAULT_USER=guest
+ENV RABBITMQ_DEFAULT_PASS=guest
+
+# Expor as portas do RabbitMQ
+EXPOSE 5672 15672
+
+# Comando para iniciar o RabbitMQ
+CMD ["rabbitmq-server"]

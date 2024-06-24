@@ -1,0 +1,41 @@
+# Etapa base para ambiente de desenvolvimento
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=http://+:80
+WORKDIR /app
+EXPOSE 80
+
+# Etapa de build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copiar arquivos de projeto e restaurar dependências
+COPY ["BuildingBlocks/Core/FinancialFlow.Core/FinancialFlow.Core.csproj", "BuildingBlocks/Core/FinancialFlow.Core/"]
+COPY ["Services/FinancialFlow.Application/FinancialFlow.Application.csproj", "Services/FinancialFlow.Application/"]
+COPY ["Services/FinancialFlow.Data/FinancialFlow.Data.csproj", "Services/FinancialFlow.Data/"]
+COPY ["Services/FinancialFlow.Domain/FinancialFlow.Domain.csproj", "Services/FinancialFlow.Domain/"]
+COPY ["Services/RabbitMQConsumer/RabbitMQConsumer.csproj", "Services/RabbitMQConsumer/"]
+
+# Restaurar dependências
+RUN dotnet restore "Services/RabbitMQConsumer/RabbitMQConsumer.csproj"
+
+# Copiar o restante dos arquivos
+COPY . .
+WORKDIR "/src/Services/RabbitMQConsumer"
+
+# Build da aplicação
+RUN dotnet build "RabbitMQConsumer.csproj" -c Release -o /app/build
+
+# Etapa de publicação
+FROM build AS publish
+RUN dotnet publish "RabbitMQConsumer.csproj" -c Release -o /app/publish
+
+# Etapa final
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+
+# Ponto de entrada para o ambiente de desenvolvimento e execução do Swagger
+ENTRYPOINT ["dotnet", "RabbitMQConsumer.dll" , "--environment=Development"]
+

@@ -1,0 +1,44 @@
+# Etapa base para ambiente de desenvolvimento
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=http://+:80
+WORKDIR /app
+EXPOSE 80
+
+# Etapa de build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copiar arquivos de projeto e restaurar dependências
+COPY ["BuildingBlocks/Core/FinancialFlow.Core/FinancialFlow.Core.csproj", "BuildingBlocks/Core/FinancialFlow.Core/"]
+COPY ["Services/FinancialFlow.API/FinancialFlow.API.csproj", "Services/FinancialFlow.API/"]
+COPY ["Services/FinancialFlow.Application/FinancialFlow.Application.csproj", "Services/FinancialFlow.Application/"]
+COPY ["Services/FinancialFlow.Data/FinancialFlow.Data.csproj", "Services/FinancialFlow.Data/"]
+COPY ["Services/FinancialFlow.Domain/FinancialFlow.Domain.csproj", "Services/FinancialFlow.Domain/"]
+
+# Restaurar dependências
+RUN dotnet restore "Services/FinancialFlow.API/FinancialFlow.API.csproj"
+
+# Copiar o restante dos arquivos
+COPY . .
+WORKDIR "/src/Services/FinancialFlow.API"
+
+# Build da aplicação
+RUN dotnet build "FinancialFlow.API.csproj" -c Release -o /app/build
+
+# Etapa de publicação
+FROM build AS publish
+RUN dotnet publish "FinancialFlow.API.csproj" -c Release -o /app/publish
+
+# Etapa final
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+# Instalar a ferramenta dotnet-ef
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+# Ponto de entrada para o ambiente de desenvolvimento e execução do Swagger
+ENTRYPOINT ["dotnet", "FinancialFlow.API.dll", "--environment=Development"]
+
